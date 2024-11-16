@@ -18,6 +18,14 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+    repositories {
+        // Define where to publish the library
+        maven {
+            name = "localMaven"
+            url = uri("${project.rootDir}/maven-repo") // Local Maven directory
+        }
+    }
+
 }
 
 base {
@@ -163,17 +171,59 @@ sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
 // Example configuration to allow publishing using the maven-publish plugin
-publishing {
+/*publishing {
     publications {
         register('mavenJava', MavenPublication) {
             from components.java
         }
     }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
+}*/
+
+/*publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+
+            // Define the group, artifact, and version
+            groupId = 'io.purple'
+            artifactId = "purplelib-${mc_version}"
+            version = "purplelib-${purplelib_version}"
         }
     }
+
+    repositories {
+        // Define where to publish the library
+        maven {
+            name = "localMaven"
+            url = uri("${project.rootDir}/maven-repo") // Local Maven directory
+        }
+    }
+}*/
+
+publishing {
+    publications {
+        create('mavenJava', MavenPublication) {
+            groupId = 'io.purple'
+            artifactId = "purplelib-${minecraft_version}"
+            version = "${purplelib_version}"
+
+            // Use the JAR task output explicitly
+            artifact tasks.named('jar').get()
+        }
+    }
+    repositories {
+        maven {
+            name = "localMaven"
+            url = uri("${project.rootDir}/../maven-repo")
+        }
+    }
+    repositories {
+        maven {
+            name = "localMaven"
+            url = uri("${project.rootDir}/maven-repo")
+        }
+    }
+
 }
 
 tasks.withType(JavaCompile).configureEach {
