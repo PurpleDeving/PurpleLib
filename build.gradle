@@ -18,12 +18,10 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
-    repositories {
-        // Define where to publish the library
-        maven {
-            name = "localMaven"
-            url = uri("${project.rootDir}/maven-repo") // Local Maven directory
-        }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
     }
 
 }
@@ -125,7 +123,7 @@ dependencies {
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
     // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
     // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
-    // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
+    localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
