@@ -1,5 +1,7 @@
 package io.purple.purplelib.registry;
 
+import io.purple.purplelib.Collections;
+import io.purple.purplelib.dependency.DependMod;
 import io.purple.purplelib.item.BasicItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
@@ -17,21 +19,13 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static io.purple.purplelib.PurpleLib.MODID;
+import static io.purple.purplelib.dependency.DependMod.dependMods;
 
 public class PLRegistry {
 
-    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
-    private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
-    // TODO - Change to hold BasicItems
-    // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
-
-
-
 
 /*
-    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
 
     // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
     public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
@@ -46,12 +40,25 @@ public class PLRegistry {
 
 
     public static void register(IEventBus modEventBus){
-        // Register the Deferred Register to the mod event bus so blocks get registered
-        BLOCKS.register(modEventBus);
+
         // Register the Deferred Register to the mod event bus so items get registered
-        ITEMS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so tabs get registered
-        /*CREATIVE_MODE_TABS.register(modEventBus);*/
+        for(DependMod dependMod : dependMods){
+
+            // Check if there are Blocks to register
+            if(!dependMod.getBManager().BLOCKS.getEntries().isEmpty()){
+                dependMod.getBManager().BLOCKS.register(modEventBus);
+            }
+
+            // Check if there are Items to register
+            if(!dependMod.getIManager().ITEMS.getEntries().isEmpty()){
+                // Register the item Registry
+                dependMod.getIManager().ITEMS.register(modEventBus);
+                // Make sure a Creative Tab exist
+                if(Collections.CREATIVE_MODE_TABS.get(dependMod) != null){
+                    dependMod.getCtManager().CREATIVE_MODE_TAB.register(modEventBus);
+                }
+            }
+        }
     }
 
 
@@ -61,10 +68,10 @@ public class PLRegistry {
     }
 
 
-/*    public static void addCreative(BuildCreativeModeTabContentsEvent event) {
+    public static void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS){
-            event.accept(EXAMPLE_BLOCK_ITEM);
+            // event.accept(EXAMPLE_BLOCK_ITEM); TODO FIXME
         }
 
-    }*/
+    }
 }
