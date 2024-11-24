@@ -44,6 +44,9 @@ public class CreativeTabManager {
                             for (DeferredItem<? extends Item> item: Collections.MODITEMS.get(parent).values()){
                                 output.accept(item);
                             }
+                            for (DeferredItem<? extends Item> item: Collections.MODBLOCKITEMS.get(parent).values()){
+                                output.accept(item);
+                            }
                         })).build()));
     }
 

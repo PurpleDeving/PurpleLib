@@ -47,6 +47,7 @@ public class PLRegistry {
             // Check if there are Blocks to register
             if(!dependMod.getBManager().BLOCKS.getEntries().isEmpty()){
                 dependMod.getBManager().BLOCKS.register(modEventBus);
+
             }
 
             // Check if there are Items to register
@@ -68,10 +69,4 @@ public class PLRegistry {
     }
 
 
-    public static void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS){
-            // event.accept(EXAMPLE_BLOCK_ITEM); TODO FIXME
-        }
-
-    }
 }
